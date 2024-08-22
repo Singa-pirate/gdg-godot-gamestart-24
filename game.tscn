@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://w8f5wgid1c0g"]
+
+[ext_resource type="Script" path="res://game.gd" id="1_hcn81"]
+[ext_resource type="PackedScene" uid="uid://cmxn4sv77k2ud" path="res://platform.tscn" id="3_0gvq3"]
+[ext_resource type="PackedScene" uid="uid://boxsa6y037ej3" path="res://player.tscn" id="3_px7xn"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_hcn81")
+
+[node name="Player" parent="." instance=ExtResource("3_px7xn")]
+position = Vector2(117, 364)
+scale = Vector2(3.27801, 3.27801)
+
+[node name="Platform" parent="." instance=ExtResource("3_0gvq3")]
+position = Vector2(138, 489)
+scale = Vector2(3.67217, 3.67217)
+
+[node name="Platform2" parent="." instance=ExtResource("3_0gvq3")]
+position = Vector2(424, 491)
+scale = Vector2(3.67217, 3.67217)
+
+[node name="Platform3" parent="." instance=ExtResource("3_0gvq3")]
+position = Vector2(1003, 140)
+rotation = -0.16123
+scale = Vector2(3.67217, 3.67217)
+
+[node name="Platform4" parent="." instance=ExtResource("3_0gvq3")]
+position = Vector2(827, 395)
+rotation = 0.242099
+scale = Vector2(3.67217, 3.67217)
