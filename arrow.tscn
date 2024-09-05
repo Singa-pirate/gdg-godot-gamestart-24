@@ -18,4 +18,9 @@ texture = ExtResource("1_u6glo")
 position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_ixknl")
 
+[node name="disappear_timer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="disappear_timer" to="." method="_on_disappear_timer_timeout"]

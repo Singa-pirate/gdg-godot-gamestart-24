@@ -7,6 +7,8 @@ const JUMP_VELOCITY = -400.0
 
 const MAX_HEALTH = 100
 const DAMAGE_INTERVAL = 2
+const MAX_ARROW_COUNT = 1
+const ARROW_REPLENISH_TIME = 2
 
 var direction = 1
 var health
@@ -14,11 +16,24 @@ var health
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var timer
 var can_take_damage = true
+var arrow_count
+var arrow_timer
+var sprite
+var animation_player
+var health_bar
+var player_hurt_sound
 
 func _ready():
 	health = MAX_HEALTH
 	timer = $DamageTimer
 	timer.wait_time = DAMAGE_INTERVAL
+	arrow_count = MAX_ARROW_COUNT
+	arrow_timer = $ArrowTimer
+	arrow_timer.wait_time = ARROW_REPLENISH_TIME
+	sprite = $AnimatedSprite2D
+	animation_player = $AnimationPlayer
+	health_bar = $"../UI/HealthBar"
+	player_hurt_sound = $"../PlayerHurt"
 
 func _physics_process(delta):
 	velocity.y += gravity * delta
@@ -45,35 +60,50 @@ func _physics_process(delta):
 		shoot_arrow()
 	
 	if direction:
+		sprite.set_animation("running")
 		velocity.x = direction * SPEED
 	else:
-		velocity.x = lerpf(velocity.x, 0, 0.05)
+		sprite.set_animation("idle")
+		if is_on_floor():
+			velocity.x = lerpf(velocity.x, 0, 0.1)
+		else:
+			velocity.x = lerpf(velocity.x, 0, 0.05)
 	
 	if velocity.x < 0:
-		$Sprite2D.flip_h = true
+		sprite.flip_h = true
 	elif velocity.x > 0:
-		$Sprite2D.flip_h = false
+		sprite.flip_h = false
 	
 	move_and_slide()
 	
 func take_damage(damage):
 	if can_take_damage:
+		player_hurt_sound.play()
+		animation_player.play("take_damage")
 		can_take_damage = false
 		timer.start()
 		print("%s is damaged by %d health" % [name, damage])
 		health -= damage
+		health_bar.value = health
 		if health <= 0:
 			queue_free()
 
 func shoot_arrow():
-	var arrow = ARROW.instantiate()
-	arrow.position = position
-	var mouse_position = get_global_mouse_position()
-	var shoot_direction = (mouse_position - position).normalized()
-	print(shoot_direction)
-	arrow.direction = shoot_direction
-	arrow.rotation = shoot_direction.angle()
-	get_parent().add_child(arrow)
+	if arrow_count > 0:
+		arrow_count -= 1
+		arrow_timer.start()
+		var arrow = ARROW.instantiate()
+		arrow.position = position
+		var mouse_position = get_global_mouse_position()
+		var shoot_direction = (mouse_position - position).normalized()
+		print(shoot_direction)
+		arrow.direction = shoot_direction
+		arrow.rotation = shoot_direction.angle()
+		get_parent().add_child(arrow)
 
 func _on_damage_timer_timeout():
 	can_take_damage = true
+
+
+func _on_arrow_timer_timeout():
+	arrow_count = MAX_ARROW_COUNT

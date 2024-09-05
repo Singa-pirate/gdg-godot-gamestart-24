@@ -1,18 +1,125 @@
-[gd_scene load_steps=4 format=3 uid="uid://boxsa6y037ej3"]
+[gd_scene load_steps=18 format=3 uid="uid://boxsa6y037ej3"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_mqae0"]
-[ext_resource type="Texture2D" uid="uid://dllrefeasvca7" path="res://knight.png" id="1_sneov"]
+[ext_resource type="Texture2D" uid="uid://boahrgjol1a32" path="res://knight_idle.png" id="2_1ssnc"]
+[ext_resource type="Texture2D" uid="uid://cmtvlwnls5hh7" path="res://knight_run.png" id="3_255a3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d0lsc"]
+atlas = ExtResource("2_1ssnc")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hjciu"]
+atlas = ExtResource("2_1ssnc")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bq2v3"]
+atlas = ExtResource("2_1ssnc")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r35v7"]
+atlas = ExtResource("2_1ssnc")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vwjfh"]
+atlas = ExtResource("3_255a3")
+region = Rect2(0, 30, 64, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cjh2w"]
+atlas = ExtResource("3_255a3")
+region = Rect2(64, 30, 64, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vkpko"]
+atlas = ExtResource("3_255a3")
+region = Rect2(128, 30, 64, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dwhqw"]
+atlas = ExtResource("3_255a3")
+region = Rect2(192, 30, 64, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fcu8h"]
+atlas = ExtResource("3_255a3")
+region = Rect2(256, 30, 64, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pmxw5"]
+atlas = ExtResource("3_255a3")
+region = Rect2(320, 30, 64, 34)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_eawde"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d0lsc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hjciu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bq2v3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r35v7")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vwjfh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cjh2w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vkpko")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dwhqw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fcu8h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pmxw5")
+}],
+"loop": true,
+"name": &"running",
+"speed": 5.0
+}]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ie2gg"]
 radius = 6.0
 height = 24.0
 
+[sub_resource type="Animation" id="Animation_5msfr"]
+resource_name = "take_damage"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_h8brj"]
+_data = {
+"take_damage": SubResource("Animation_5msfr")
+}
+
 [node name="Player" type="CharacterBody2D"]
 collision_mask = 4
 script = ExtResource("1_mqae0")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_sneov")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_eawde")
+animation = &"running"
+autoplay = "idle"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(-5, -1, -7, -2, -7, -9, -4, -12, 4, -13, 7, -10, 8, -4, 7, -3, 7, -1, 9, 1, 9, 3, 6, 7, 6, 10, 8, 12, 7, 14, 8, 16, 3, 16, 2, 14, -3, 14, -4, 16, -10, 16, -4, 8, -7, 4, -7, 1)
@@ -26,4 +133,13 @@ shape = SubResource("CapsuleShape2D_ie2gg")
 [node name="DamageTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="ArrowTimer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_h8brj")
+}
+
 [connection signal="timeout" from="DamageTimer" to="." method="_on_damage_timer_timeout"]
+[connection signal="timeout" from="ArrowTimer" to="." method="_on_arrow_timer_timeout"]
