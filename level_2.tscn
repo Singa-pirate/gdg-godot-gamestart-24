@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://dav8wtougr6cb"]
+
+[ext_resource type="PackedScene" uid="uid://boxsa6y037ej3" path="res://player.tscn" id="1_rhdou"]
+[ext_resource type="Texture2D" uid="uid://cotyv1ydlrcs5" path="res://Background_2.png" id="2_38mfr"]
+[ext_resource type="Texture2D" uid="uid://dj0fl57cr2s6u" path="res://Background_1.png" id="3_o5scg"]
+[ext_resource type="PackedScene" uid="uid://bh085e7mvet1h" path="res://ui.tscn" id="4_l0c7e"]
+
+[node name="Level2" type="Node"]
+
+[node name="Player" parent="." instance=ExtResource("1_rhdou")]
+position = Vector2(84, 394)
+scale = Vector2(1.8965, 1.8965)
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.2, 0.2)
+motion_mirroring = Vector2(2976, 1632)
+
+[node name="Background" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+scale = Vector2(6, 6)
+texture = ExtResource("2_38mfr")
+centered = false
+
+[node name="BackgroundCloud" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+scale = Vector2(6, 6)
+texture = ExtResource("3_o5scg")
+centered = false
+
+[node name="UI" parent="." instance=ExtResource("4_l0c7e")]

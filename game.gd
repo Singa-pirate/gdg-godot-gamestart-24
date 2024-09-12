@@ -1,33 +1,25 @@
-extends Node2D
+extends Node
 
-const SPEED = 1000
-var direction = 1
-var count = 0
+const LEVEL_1 = preload("res://level1.tscn")
+const LEVEL_2 = preload("res://level_2.tscn")
 
+const LEVELS = [LEVEL_1, LEVEL_2]
+
+var current_level
+
+# Called when the node enters the scene tree for the first time.
 func _ready():
-	var a = 1 + 1
-	
-	direction = -1
-	
-	print_direction()
-	direction = 0
-	
-	print_direction()
-	
-	var boolean = direction == 1 and (SPEED > 500 or direction == -1)
-	
-	print(boolean)
-	
+	current_level = LEVEL_1.instantiate()
+	add_child(current_level)
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
 	pass
 
-func _physics_process(delta):
-	pass
+func change_level(n):
+	var new_level = LEVELS[n-1].instantiate()
+	add_child(new_level)
+	current_level.queue_free()
+	current_level = new_level
 
-func print_direction():
-	if direction == 1:
-		print("moving to the right")
-	elif direction == -1:
-		print("moving to the left")
-	else:
-		print("not moving")
-	

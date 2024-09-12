@@ -1,0 +1,69 @@
+[gd_scene load_steps=12 format=3 uid="uid://w8f5wgid1c0g"]
+
+[ext_resource type="Script" path="res://level1.gd" id="1_nx5sk"]
+[ext_resource type="PackedScene" uid="uid://boxsa6y037ej3" path="res://player.tscn" id="2_webyh"]
+[ext_resource type="PackedScene" uid="uid://mq2k5h6i1l3a" path="res://skeleton.tscn" id="3_axcf5"]
+[ext_resource type="PackedScene" uid="uid://cwcyo0gadbpnu" path="res://orc.tscn" id="4_w3luk"]
+[ext_resource type="PackedScene" uid="uid://bh085e7mvet1h" path="res://ui.tscn" id="5_wygor"]
+[ext_resource type="AudioStream" uid="uid://cchtwi82bq4cl" path="res://BGM.ogg" id="6_ap8fd"]
+[ext_resource type="AudioStream" uid="uid://3vgoj8fjpvr0" path="res://player_hurt.ogg" id="7_hdbsb"]
+[ext_resource type="AudioStream" uid="uid://bgfsmbgum15pl" path="res://enemy_hurt.ogg" id="8_ndegc"]
+[ext_resource type="Texture2D" uid="uid://cotyv1ydlrcs5" path="res://Background_2.png" id="9_wx3dt"]
+[ext_resource type="Texture2D" uid="uid://dj0fl57cr2s6u" path="res://Background_1.png" id="10_1imn2"]
+[ext_resource type="PackedScene" uid="uid://q8ouctwu4qvn" path="res://tile_map.tscn" id="11_m4y7j"]
+
+[node name="Level1" type="Node2D"]
+script = ExtResource("1_nx5sk")
+
+[node name="TileMap" parent="." instance=ExtResource("11_m4y7j")]
+position = Vector2(-112, 434)
+scale = Vector2(3.85612, 3.85612)
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.2, 0.2)
+motion_mirroring = Vector2(2976, 1632)
+
+[node name="Background" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+scale = Vector2(6, 6)
+texture = ExtResource("9_wx3dt")
+centered = false
+
+[node name="BackgroundCloud" type="Sprite2D" parent="ParallaxBackground/ParallaxLayer"]
+scale = Vector2(6, 6)
+texture = ExtResource("10_1imn2")
+centered = false
+
+[node name="Player" parent="." instance=ExtResource("2_webyh")]
+position = Vector2(84, 394)
+scale = Vector2(1.8965, 1.8965)
+
+[node name="Skeleton" parent="." instance=ExtResource("3_axcf5")]
+position = Vector2(1281, 495)
+scale = Vector2(2.17308, 2.17308)
+
+[node name="orc" parent="." instance=ExtResource("4_w3luk")]
+position = Vector2(608, 207)
+scale = Vector2(2.64783, 2.64783)
+
+[node name="orc2" parent="." instance=ExtResource("4_w3luk")]
+position = Vector2(1098, 266)
+scale = Vector2(2.64783, 2.64783)
+
+[node name="orc3" parent="." instance=ExtResource("4_w3luk")]
+position = Vector2(1704, -44)
+scale = Vector2(2.64783, 2.64783)
+
+[node name="UI" parent="." instance=ExtResource("5_wygor")]
+
+[node name="BGM" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_ap8fd")
+autoplay = true
+
+[node name="PlayerHurt" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_hdbsb")
+volume_db = 10.0
+
+[node name="EnemyHurt" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_ndegc")

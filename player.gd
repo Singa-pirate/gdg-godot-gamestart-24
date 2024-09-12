@@ -2,8 +2,8 @@ extends CharacterBody2D
 
 const ARROW = preload("res://arrow.tscn")
 
-const SPEED = 200.0
-const JUMP_VELOCITY = -400.0
+const SPEED = 300.0
+const JUMP_VELOCITY = -600.0
 
 const MAX_HEALTH = 100
 const DAMAGE_INTERVAL = 2
@@ -22,6 +22,7 @@ var sprite
 var animation_player
 var health_bar
 var player_hurt_sound
+var arrow_label
 
 func _ready():
 	health = MAX_HEALTH
@@ -34,6 +35,8 @@ func _ready():
 	animation_player = $AnimationPlayer
 	health_bar = $"../UI/HealthBar"
 	player_hurt_sound = $"../PlayerHurt"
+	arrow_label = $"../UI/ArrowLabel"
+	arrow_label.text = "x%d" % MAX_ARROW_COUNT
 
 func _physics_process(delta):
 	velocity.y += gravity * delta
@@ -56,9 +59,6 @@ func _physics_process(delta):
 	if not (Input.is_action_pressed("ui_right") or Input.is_action_pressed("ui_left")):
 		direction = 0
 	
-	if Input.is_action_just_pressed("ui_mouse_click"):
-		shoot_arrow()
-	
 	if direction:
 		sprite.set_animation("running")
 		velocity.x = direction * SPEED
@@ -76,8 +76,13 @@ func _physics_process(delta):
 	
 	move_and_slide()
 	
+func _unhandled_input(event):
+	if event.is_action_pressed("ui_mouse_click"):
+		shoot_arrow()
+	
 func take_damage(damage):
 	if can_take_damage:
+		player_hurt_sound.position = position
 		player_hurt_sound.play()
 		animation_player.play("take_damage")
 		can_take_damage = false
@@ -91,6 +96,7 @@ func take_damage(damage):
 func shoot_arrow():
 	if arrow_count > 0:
 		arrow_count -= 1
+		arrow_label.text = "x%d" % arrow_count
 		arrow_timer.start()
 		var arrow = ARROW.instantiate()
 		arrow.position = position
@@ -107,3 +113,4 @@ func _on_damage_timer_timeout():
 
 func _on_arrow_timer_timeout():
 	arrow_count = MAX_ARROW_COUNT
+	arrow_label.text = "x%d" % arrow_count

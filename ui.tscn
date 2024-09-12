@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://bh085e7mvet1h"]
+[gd_scene load_steps=8 format=3 uid="uid://bh085e7mvet1h"]
 
+[ext_resource type="Script" path="res://ui.gd" id="1_1t6eo"]
 [ext_resource type="FontFile" uid="uid://d3qt4cr56tcl8" path="res://m3x6.ttf" id="1_4yady"]
 [ext_resource type="Texture2D" uid="uid://blegw2ywr6jum" path="res://healthbar_under.png" id="2_lny18"]
 [ext_resource type="Texture2D" uid="uid://c6r0oel7lipxk" path="res://healthbar_progress.png" id="3_p5ffq"]
@@ -9,26 +10,33 @@
 default_font = ExtResource("1_4yady")
 default_font_size = 64
 
-[node name="UI" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[sub_resource type="Theme" id="Theme_g76a5"]
+default_font = ExtResource("1_4yady")
+default_font_size = 64
+
+[node name="UI" type="CanvasLayer"]
+script = ExtResource("1_1t6eo")
 
 [node name="Label" type="Label" parent="."]
-layout_mode = 0
 offset_left = 33.0
 offset_top = 7.0
 offset_right = 116.0
 offset_bottom = 58.0
 scale = Vector2(1.43294, 1.2514)
 theme = SubResource("Theme_bf3ec")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "HP"
 
+[node name="ArrowLabel" type="Label" parent="."]
+offset_left = 93.0
+offset_top = 78.0
+offset_right = 145.0
+offset_bottom = 129.0
+theme = SubResource("Theme_g76a5")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "x1"
+
 [node name="HealthBar" type="TextureProgressBar" parent="."]
-layout_mode = 0
 offset_left = 99.0
 offset_top = 36.0
 offset_right = 371.0
@@ -39,10 +47,40 @@ texture_progress = ExtResource("3_p5ffq")
 texture_progress_offset = Vector2(3, 2)
 
 [node name="TextureRect" type="TextureRect" parent="."]
-layout_mode = 0
 offset_left = 25.0
 offset_top = 91.0
 offset_right = 83.0
 offset_bottom = 131.0
 scale = Vector2(1.00072, 1.00072)
 texture = ExtResource("4_2a0ej")
+
+[node name="Button" type="Button" parent="."]
+process_mode = 3
+offset_left = 810.0
+offset_top = 34.0
+offset_right = 865.0
+offset_bottom = 65.0
+mouse_default_cursor_shape = 2
+text = "Pause"
+
+[node name="Level1Button" type="Button" parent="."]
+process_mode = 3
+offset_left = 884.0
+offset_top = 34.0
+offset_right = 939.0
+offset_bottom = 65.0
+mouse_default_cursor_shape = 2
+text = "1"
+
+[node name="Level2Button" type="Button" parent="."]
+process_mode = 3
+offset_left = 955.0
+offset_top = 34.0
+offset_right = 1010.0
+offset_bottom = 65.0
+mouse_default_cursor_shape = 2
+text = "2"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Level1Button" to="." method="_on_level_1_button_pressed"]
+[connection signal="pressed" from="Level2Button" to="." method="_on_level_2_button_pressed"]

@@ -1,6 +1,6 @@
 extends Area2D
 
-const SPEED = 200
+const SPEED = 400
 var direction = Vector2(1, 0)
 var stopped = false
 var disappear_timer
@@ -22,10 +22,11 @@ func _process(delta):
 
 func _on_body_entered(body):
 	if "enemy" in body.get_groups():
+		enemy_hurt_sound.position = position
 		enemy_hurt_sound.play()
 		body.queue_free()
 		queue_free()
-	elif body.get_collision_layer_value(3):
+	elif "platform" in body.get_groups():
 		stopped = true
 		collision_shape.queue_free()
 		disappear_timer.start()

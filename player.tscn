@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://boxsa6y037ej3"]
+[gd_scene load_steps=19 format=3 uid="uid://boxsa6y037ej3"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_mqae0"]
 [ext_resource type="Texture2D" uid="uid://boahrgjol1a32" path="res://knight_idle.png" id="2_1ssnc"]
@@ -87,6 +87,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m6636"]
+size = Vector2(12, 26)
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ie2gg"]
 radius = 6.0
 height = 24.0
@@ -121,8 +124,9 @@ sprite_frames = SubResource("SpriteFrames_eawde")
 animation = &"running"
 autoplay = "idle"
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-5, -1, -7, -2, -7, -9, -4, -12, 4, -13, 7, -10, 8, -4, 7, -3, 7, -1, 9, 1, 9, 3, 6, 7, 6, 10, 8, 12, 7, 14, 8, 16, 3, 16, 2, 14, -3, 14, -4, 16, -10, 16, -4, 8, -7, 4, -7, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_m6636")
 
 [node name="Hitbox" type="Area2D" parent="."]
 
@@ -140,6 +144,14 @@ wait_time = 2.0
 libraries = {
 "": SubResource("AnimationLibrary_h8brj")
 }
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(50, -100)
+zoom = Vector2(0.7, 0.7)
+limit_top = -1500
+limit_bottom = 15000
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
 
 [connection signal="timeout" from="DamageTimer" to="." method="_on_damage_timer_timeout"]
 [connection signal="timeout" from="ArrowTimer" to="." method="_on_arrow_timer_timeout"]
